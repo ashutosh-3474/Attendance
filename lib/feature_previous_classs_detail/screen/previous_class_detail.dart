@@ -1,12 +1,24 @@
+import 'package:attendance/feature_course_detail/modals/class.dart';
+import 'package:attendance/feature_course_detail/modals/student.dart';
+import 'package:attendance/feature_dashboard/modals/course.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/common/app_assets/appStrings.dart';
 import 'package:attendance/common/app_assets/colors.dart';
 import 'package:attendance/common/app_assets/font.dart';
 import 'package:attendance/common/variables/variables.dart';
 
-class PreviousClassDetail extends StatelessWidget {
-  const PreviousClassDetail({super.key});
+class PreviousClassDetail extends StatefulWidget {
+  PreviousClassDetail(
+      {super.key, required this.studentList, required this.course, required this.classDetail});
+  List<Student> studentList;
+  Course course;
+  Class classDetail;
 
+  @override
+  State<PreviousClassDetail> createState() => _PreviousClassDetailState();
+}
+
+class _PreviousClassDetailState extends State<PreviousClassDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +47,13 @@ class PreviousClassDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Subject Subject Subject Subject Subject',
+              widget.course.subject,
               style: TextStyle(
                   fontFamily: font.dashboardAppbar,
                   color: ColorsVariables.textDashboardAppBar),
             ),
             Text(
-              'Batch: 2022 - Branch: CSE',
+              'Batch: ${widget.course.batch} - Branch: ${widget.course.branch}',
               style: TextStyle(
                   fontFamily: font.dashboardAppbar,
                   color: ColorsVariables.textDashboardAppBar),
@@ -52,10 +64,10 @@ class PreviousClassDetail extends StatelessWidget {
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 11, right: 11, top: 21, bottom: 11),
             child: Text(
-              "Date: 10/10/2024\nDay: Sunday",
+              "Date: ${widget.classDetail.date}\nDay: ${widget.classDetail.day}",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 21,
@@ -66,7 +78,7 @@ class PreviousClassDetail extends StatelessWidget {
           Divider(),
           Expanded(
             child: ListView.builder(
-              itemCount: 50,
+              itemCount: widget.studentList.length,
               itemBuilder: (context, index) {
                 return Container(
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -88,12 +100,13 @@ class PreviousClassDetail extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      "Ashutosh Mishra\n2201062CS",
+                      "${widget.studentList[index].name}\n${widget.studentList[index].id}",
+                      // "Ashutosh Mishra\n2201062CS",
                       // "${courseList[0]['subject']}\nBatch: ${courseList[0]['batch'].toString()}",
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                     trailing: Text(
-                      "P",
+                       (widget.classDetail.attendence[widget.studentList[index].id])?"P":"A" ,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
